@@ -152,10 +152,16 @@ static char *KVOMSTextViewFrameDidChange = "KVOMSTextViewFrameDidChange";
 
   for ( int i = 0; i < [links count]; i++ ) {
     NSTextCheckingResult *cr = [current objectAtIndex:0];
-    NSString *url = [theText substringWithRange:cr.range];
-
-    [theText replaceOccurrencesOfString:url
-                           withString:[NSString stringWithFormat:@"<a href=\"%@\">%@</a>", url, url]
+    NSString *link = [theText substringWithRange:cr.range];
+      
+      // check for url without protocol
+      NSURL *url = [NSURL URLWithString:link];
+      if (url.scheme == nil) {
+          url = [NSURL URLWithString:[@"http://" stringByAppendingString:link]];
+      }
+          
+    [theText replaceOccurrencesOfString:link
+                           withString:[NSString stringWithFormat:@"<a href=\"%@\">%@</a>", url.absoluteString, link]
                               options:NSLiteralSearch
                                 range:NSMakeRange(0, theText.length)];
 
