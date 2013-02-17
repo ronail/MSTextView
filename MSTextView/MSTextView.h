@@ -8,8 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+@class MSTextView;
+
 @protocol MSTextViewDelegate <NSObject>
 - (void)msTextViewHandleURL:(NSURL*)url;
+- (void) msTextViewDidLoad:(MSTextView *)textView;
 @end
 
 

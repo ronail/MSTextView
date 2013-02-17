@@ -112,12 +112,18 @@ static char *KVOMSTextViewFrameDidChange = "KVOMSTextViewFrameDidChange";
   frame.size.height = 1;
   webView.frame = frame;
 
-  CGSize fittingSize = [webView sizeThatFits:CGSizeZero];
+    CGSize fittingSize = [webView sizeThatFits:CGSizeZero];
+    int content_height = [[webView stringByEvaluatingJavaScriptFromString: @"document.body.offsetHeight"] integerValue];
+    fittingSize.height = content_height;
   frame.size = fittingSize;
   webView.frame = frame;
 
-  if (self.frame.size.height < webView.frame.size.height)
+
+//  if (self.frame.size.height < webView.frame.size.height)
     self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, webView.frame.size.height);
+    
+    if ([self.delegate respondsToSelector:@selector(msTextViewDidLoad:)])
+        [self.delegate msTextViewDidLoad:self];
 }
 
 #pragma mark -
