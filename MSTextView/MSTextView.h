@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @protocol MSTextViewDelegate <NSObject>
-- (void)handleURL:(NSURL*)url;
+- (void)msTextViewHandleURL:(NSURL*)url;
 @end
 
 

@@ -96,8 +96,8 @@ static char *KVOMSTextViewFrameDidChange = "KVOMSTextViewFrameDidChange";
 {
   if( navigationType == UIWebViewNavigationTypeLinkClicked )
   {
-    if ([self.delegate respondsToSelector:@selector(handleURL:)]) {
-      [self.delegate handleURL:request.URL];
+    if ([self.delegate respondsToSelector:@selector(msTextViewHandleURL:)]) {
+      [self.delegate msTextViewHandleURL:request.URL];
     }
 
     return NO;
