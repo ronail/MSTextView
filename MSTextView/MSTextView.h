@@ -20,7 +20,7 @@
   UIWebView *_aWebView;
 }
 
-@property (nonatomic, assign) id<MSTextViewDelegate> delegate;
+@property (nonatomic, assign) IBOutlet id<MSTextViewDelegate> delegate;
 
 @property (nonatomic, retain) UIFont *font;
 @property (nonatomic, retain) NSString *text;
