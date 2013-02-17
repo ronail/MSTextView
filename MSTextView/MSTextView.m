@@ -43,39 +43,53 @@ static char *KVOMSTextViewFrameDidChange = "KVOMSTextViewFrameDidChange";
   return self;
 }
 
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        [self initView];
+    }
+    return self;
+}
+
 - (id)initWithFrame:(CGRect)frame
 {
   if ((self = [super initWithFrame:frame]))
   {
+      [self initView];
+  }
+
+  return self;
+}
+
+- (void) initView
+{
     self.aWebView = [[UIWebView alloc] initWithFrame:self.bounds];
     self.aWebView.opaque = NO;
     self.aWebView.backgroundColor = [UIColor clearColor];
     self.aWebView.delegate = self;
     [self addSubview:self.aWebView];
-
+    
     self.font = kMSTextViewFont;
-
+    
     for (id subview in self.aWebView.subviews)
     {
-      // turn off scrolling in UIWebView
-      if ([[subview class] isSubclassOfClass:[UIScrollView class]]) {
-        ((UIScrollView *)subview).bounces = NO;
-        ((UIScrollView *)subview).scrollEnabled = NO;
-      }
-
-      // make UIWebView transparent
-      if ([subview isKindOfClass:[UIImageView class]])
-        ((UIImageView *)subview).hidden = YES;
-      }
-
+        // turn off scrolling in UIWebView
+        if ([[subview class] isSubclassOfClass:[UIScrollView class]]) {
+            ((UIScrollView *)subview).bounces = NO;
+            ((UIScrollView *)subview).scrollEnabled = NO;
+        }
+        
+        // make UIWebView transparent
+        if ([subview isKindOfClass:[UIImageView class]])
+            ((UIImageView *)subview).hidden = YES;
+    }
+    
     /*! Using Key-Value Observing/KVO to parse text after changing it */
     [self addObserver:self forKeyPath:@"text" options:NSKeyValueObservingOptionNew context:KVOMSTextViewTextDidChange];
-
+    
     /*! Using Key-Value Observing/KVO to change aWebView frame after changing MSTextView's frame */
     [self addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:KVOMSTextViewFrameDidChange];
-  }
-
-  return self;
 }
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
@@ -125,7 +139,8 @@ static char *KVOMSTextViewFrameDidChange = "KVOMSTextViewFrameDidChange";
   NSMutableString *theText = [NSMutableString stringWithString:_text];
 
   NSError *error = NULL;
-  NSRegularExpression *detector = [NSRegularExpression regularExpressionWithPattern:[self linkRegex] options:0 error:&error];
+    //  NSRegularExpression *detector = [NSRegularExpression regularExpressionWithPattern:[self linkRegex] options:0 error:&error];
+    NSDataDetector *detector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:&error];
   NSArray *links = [detector matchesInString:theText options:0 range:NSMakeRange(0, theText.length)];
   NSMutableArray *current = [NSMutableArray arrayWithArray:links];
 
@@ -182,13 +197,13 @@ static char *KVOMSTextViewFrameDidChange = "KVOMSTextViewFrameDidChange";
   return [NSString stringWithFormat:embedHTML, fontName, size, theText];
 }
 
-#pragma mark -
-#pragma mark Regex
-
-- (NSString *)linkRegex
-{
-  return @"(http|https)://((\\w)*|([0-9]*)|([-|_])*)+([\\.|/]((\\w)*|([0-9]*)|([-|_])*))+";
-}
+//#pragma mark -
+//#pragma mark Regex
+//
+//- (NSString *)linkRegex
+//{
+//  return @"(http|https)://((\\w)*|([0-9]*)|([-|_])*)+([\\.|/]((\\w)*|([0-9]*)|([-|_])*))+";
+//}
 
 #pragma mark -
 #pragma mark Dealloc
