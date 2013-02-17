@@ -25,10 +25,10 @@ static char *KVOMSTextViewFrameDidChange = "KVOMSTextViewFrameDidChange";
 
 @implementation MSTextView
 
-@synthesize text = _text;
-@synthesize font = _font;
-@synthesize aWebView = _aWebView;
-@synthesize delegate;
+//@synthesize text = _text;
+//@synthesize font = _font;
+//@synthesize aWebView = _aWebView;
+//@synthesize delegate;
 
 #pragma mark -
 #pragma mark MSTextView
@@ -195,13 +195,13 @@ static char *KVOMSTextViewFrameDidChange = "KVOMSTextViewFrameDidChange";
 
 - (void) dealloc
 {
-  [_text release];
-  [_font release];
-  [_aWebView release];
+//  [_text release];
+//  [_font release];
+//  [_aWebView release];
 
   [self removeObserver:self forKeyPath:@"text"];
 
-  [super dealloc];
+//  [super dealloc];
 }
 
 @end

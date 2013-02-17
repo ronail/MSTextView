@@ -14,10 +14,10 @@
 
 
 @interface MSTextView : UIView <UIWebViewDelegate> {
-  id<MSTextViewDelegate> delegate;
-  NSString *_text;
-  UIFont *_font;
-  UIWebView *_aWebView;
+//  id<MSTextViewDelegate> delegate;
+//  NSString *_text;
+//  UIFont *_font;
+//  UIWebView *_aWebView;
 }
 
 @property (nonatomic, assign) IBOutlet id<MSTextViewDelegate> delegate;
