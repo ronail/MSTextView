@@ -86,7 +86,7 @@ static char *KVOMSTextViewFrameDidChange = "KVOMSTextViewFrameDidChange";
     }
     
     /*! Using Key-Value Observing/KVO to parse text after changing it */
-    [self addObserver:self forKeyPath:@"text" options:NSKeyValueObservingOptionNew context:KVOMSTextViewTextDidChange];
+    [self addObserver:self forKeyPath:@"text" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:KVOMSTextViewTextDidChange];
     
     /*! Using Key-Value Observing/KVO to change aWebView frame after changing MSTextView's frame */
     [self addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:KVOMSTextViewFrameDidChange];
@@ -131,9 +131,12 @@ static char *KVOMSTextViewFrameDidChange = "KVOMSTextViewFrameDidChange";
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-  if ([keyPath isEqualToString:@"text"])
-    [self parseText];
-  else if ([keyPath isEqualToString:@"frame"])
+    if ([keyPath isEqualToString:@"text"]){
+        id oldValue = [change objectForKey:NSKeyValueChangeOldKey];
+        id newValue = [change objectForKey:NSKeyValueChangeNewKey];
+        if ([oldValue isKindOfClass:[NSNull class]] || ![oldValue isEqualToString:newValue])
+            [self parseText];
+    }else if ([keyPath isEqualToString:@"frame"])
     [self.aWebView setFrame:self.bounds];
 }
 
