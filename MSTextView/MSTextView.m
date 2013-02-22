@@ -227,6 +227,7 @@ static char *KVOMSTextViewFrameDidChange = "KVOMSTextViewFrameDidChange";
 //  [_aWebView release];
 
   [self removeObserver:self forKeyPath:@"text"];
+    [self removeObserver:self forKeyPath:@"frame"];
 
 //  [super dealloc];
 }
