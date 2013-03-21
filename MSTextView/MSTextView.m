@@ -147,32 +147,34 @@ static char *KVOMSTextViewFrameDidChange = "KVOMSTextViewFrameDidChange";
 {
   NSMutableString *theText = [NSMutableString stringWithString:_text];
 
-  NSError *error = NULL;
-    //  NSRegularExpression *detector = [NSRegularExpression regularExpressionWithPattern:[self linkRegex] options:0 error:&error];
-    NSDataDetector *detector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:&error];
-  NSArray *links = [detector matchesInString:theText options:0 range:NSMakeRange(0, theText.length)];
-  NSMutableArray *current = [NSMutableArray arrayWithArray:links];
+    if (!self.explicitLinkAllowed) {
+        NSError *error = NULL;
+        //  NSRegularExpression *detector = [NSRegularExpression regularExpressionWithPattern:[self linkRegex] options:0 error:&error];
+        NSDataDetector *detector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:&error];
+        NSArray *links = [detector matchesInString:theText options:0 range:NSMakeRange(0, theText.length)];
+        NSMutableArray *current = [NSMutableArray arrayWithArray:links];
 
-  for ( int i = 0; i < [links count]; i++ ) {
-    NSTextCheckingResult *cr = [current objectAtIndex:0];
-    NSString *link = [theText substringWithRange:cr.range];
-      
-      // check for url without protocol
-      NSURL *url = [NSURL URLWithString:link];
-      if (url.scheme == nil) {
-          url = [NSURL URLWithString:[@"http://" stringByAppendingString:link]];
-      }
+        for ( int i = 0; i < [links count]; i++ ) {
+        NSTextCheckingResult *cr = [current objectAtIndex:0];
+        NSString *link = [theText substringWithRange:cr.range];
           
-    [theText replaceOccurrencesOfString:link
-                           withString:[NSString stringWithFormat:@"<a href=\"%@\">%@</a>", url.absoluteString, link]
-                              options:NSLiteralSearch
-                                range:NSMakeRange(0, theText.length)];
+          // check for url without protocol
+          NSURL *url = [NSURL URLWithString:link];
+          if (url.scheme == nil) {
+              url = [NSURL URLWithString:[@"http://" stringByAppendingString:link]];
+          }
+              
+        [theText replaceOccurrencesOfString:link
+                               withString:[NSString stringWithFormat:@"<a href=\"%@\">%@</a>", url.absoluteString, link]
+                                  options:NSLiteralSearch
+                                    range:NSMakeRange(0, theText.length)];
 
-    current = [NSMutableArray arrayWithArray:[detector matchesInString:theText options:0 range:NSMakeRange(0, theText.length)]];
-    [current removeObjectsInRange:NSMakeRange(0, ( (i+1) * 2 ))];
-  }
+        current = [NSMutableArray arrayWithArray:[detector matchesInString:theText options:0 range:NSMakeRange(0, theText.length)]];
+        [current removeObjectsInRange:NSMakeRange(0, ( (i+1) * 2 ))];
+        }
 
-  [theText replaceOccurrencesOfString:@"\n" withString:@"<br />" options:NSLiteralSearch range:NSMakeRange(0, theText.length)];
+        [theText replaceOccurrencesOfString:@"\n" withString:@"<br />" options:NSLiteralSearch range:NSMakeRange(0, theText.length)];
+    }
 
   [self.aWebView loadHTMLString:[self embedHTMLWithFontName:[self fontName]
                                                    size:[self fontSize]

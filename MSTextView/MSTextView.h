@@ -28,5 +28,5 @@
 @property (nonatomic, retain) UIFont *font;
 @property (nonatomic, retain) NSString *text;
 @property (nonatomic, retain) UIWebView *aWebView;
-
+@property (nonatomic, assign) BOOL explicitLinkAllowed;
 @end
