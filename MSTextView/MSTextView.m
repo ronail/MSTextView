@@ -37,7 +37,7 @@ static char *KVOMSTextViewFrameDidChange = "KVOMSTextViewFrameDidChange";
 {
   if ((self = [self initWithFrame:CGRectZero]))
   {
-
+      self.textColor = [UIColor blackColor];
   }
 
   return self;
@@ -47,6 +47,7 @@ static char *KVOMSTextViewFrameDidChange = "KVOMSTextViewFrameDidChange";
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
+        self.textColor = [UIColor blackColor];
         [self initView];
     }
     return self;
@@ -56,6 +57,7 @@ static char *KVOMSTextViewFrameDidChange = "KVOMSTextViewFrameDidChange";
 {
   if ((self = [super initWithFrame:frame]))
   {
+      self.textColor = [UIColor blackColor];
       [self initView];
   }
 
@@ -137,7 +139,7 @@ static char *KVOMSTextViewFrameDidChange = "KVOMSTextViewFrameDidChange";
         if ([oldValue isKindOfClass:[NSNull class]] || ![oldValue isEqualToString:newValue])
             [self parseText];
     }else if ([keyPath isEqualToString:@"frame"])
-    [self.aWebView setFrame:self.bounds];
+        [self.aWebView setFrame:self.bounds];
 }
 
 #pragma mark -
@@ -202,16 +204,29 @@ static char *KVOMSTextViewFrameDidChange = "KVOMSTextViewFrameDidChange";
                                 size:(CGFloat)size
                                 text:(NSString *)theText
 {
+    
+    NSString *textColorName = @"black"; // default for color not supported yet
+    if (self.textColor == [UIColor whiteColor]) {
+        textColorName = @"white";
+    }else if (self.textColor == [UIColor blackColor]) {
+        textColorName = @"black";
+    }else if (self.textColor == [UIColor yellowColor]) {
+        textColorName = @"yellow";
+    }else if (self.textColor == [UIColor blueColor]) {
+        textColorName = @"blue";
+    }else if (self.textColor == [UIColor redColor]) {
+        textColorName = @"red";
+    }
   NSString *embedHTML = @"\
   <html><head>\
   <style type=\"text/css\">\
-  body { background-color:transparent;font-family: \"%@\";font-size: %gpx;color: black; word-wrap: break-word;}\
+  body { background-color:transparent;font-family: \"%@\";font-size: %gpx;color: %@; word-wrap: break-word;}\
   a    { text-decoration:none; color:rgba(35,110,216,1); font-weight:bold;}\
   </style>\
   </head><body style=\"margin:0\">\
   %@\
   </body></html>";
-  return [NSString stringWithFormat:embedHTML, fontName, size, theText];
+  return [NSString stringWithFormat:embedHTML, fontName, size, textColorName, theText];
 }
 
 //#pragma mark -

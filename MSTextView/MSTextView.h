@@ -11,6 +11,7 @@
 @class MSTextView;
 
 @protocol MSTextViewDelegate <NSObject>
+@optional
 - (void)msTextViewHandleURL:(NSURL*)url;
 - (void) msTextViewDidLoad:(MSTextView *)textView;
 @end
@@ -29,4 +30,5 @@
 @property (nonatomic, retain) NSString *text;
 @property (nonatomic, retain) UIWebView *aWebView;
 @property (nonatomic, assign) BOOL explicitLinkAllowed;
+@property (nonatomic, retain) UIColor *textColor;
 @end
