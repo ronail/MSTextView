@@ -124,7 +124,7 @@ static char *KVOMSTextViewFrameDidChange = "KVOMSTextViewFrameDidChange";
 //  if (self.frame.size.height < webView.frame.size.height)
     self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, webView.frame.size.height);
     
-    if ([self.delegate respondsToSelector:@selector(msTextViewDidLoad:)])
+    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(msTextViewDidLoad:)])
         [self.delegate msTextViewDidLoad:self];
 }
 
