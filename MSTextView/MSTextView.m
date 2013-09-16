@@ -172,7 +172,9 @@ static char *KVOMSTextViewFrameDidChange = "KVOMSTextViewFrameDidChange";
                                     range:NSMakeRange(0, theText.length)];
 
         current = [NSMutableArray arrayWithArray:[detector matchesInString:theText options:0 range:NSMakeRange(0, theText.length)]];
-        [current removeObjectsInRange:NSMakeRange(0, ( (i+1) * 2 ))];
+        int len = (i+1) * 2;
+        if (current.count >= len)
+            [current removeObjectsInRange:NSMakeRange(0, len)];
         }
 
         [theText replaceOccurrencesOfString:@"\n" withString:@"<br />" options:NSLiteralSearch range:NSMakeRange(0, theText.length)];
